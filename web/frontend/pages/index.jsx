@@ -1,101 +1,42 @@
-import {
-  Card,
-  Page,
-  Layout,
-  TextContainer,
-  Image,
-  Stack,
-  Link,
-  Text,
-} from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
+import { EmptyState, Layout, LegacyCard, Page } from "@shopify/polaris";
+import { ResourcePicker, TitleBar } from "@shopify/app-bridge-react";
+import React, { useState } from "react";
 
-import { trophyImage } from "../assets";
+function Index() {
+  const [open, setOpen] = useState(false);
 
-import { ProductsCard } from "../components";
-import { CalloutCard } from "@shopify/polaris";
+  const handleSelection = (resources) => {
+    setOpen(false);
+    console.log(resources);
+  };
 
-export default function HomePage() {
   return (
-    <Page narrowWidth>
-      <TitleBar title="App name" primaryAction={null} />
+    <Page>
+      <TitleBar
+        primaryAction={{
+          content: "Select products",
+          onAction: () => setOpen(true),
+        }}
+      />
+      <ResourcePicker
+        resourceType="Product"
+        showVariants={true}
+        open={open}
+        selectMultiple={false}
+        onCancel={() => setOpen(false)}
+        onSelection={(resources) => handleSelection(resources)}
+      />
       <Layout>
-        <Layout.Section>
-          <CalloutCard
-            title="Customize the style of your checkout"
-            illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
-            primaryAction={{
-              content: "Customize checkout",
-              url: "#",
-            }}
-          >
-            <p>Upload your store’s logo, change colors and fonts, and more.</p>
-          </CalloutCard>
-        </Layout.Section>
-        <Layout.Section>
-          <Card sectioned>
-            <Stack
-              wrap={false}
-              spacing="extraTight"
-              distribution="trailing"
-              alignment="center"
-            >
-              <Stack.Item fill>
-                <TextContainer spacing="loose">
-                  <Text as="h2" variant="headingMd">
-                    Nice work on building a Shopify app 🎉
-                  </Text>
-                  <p>
-                    Your app is ready to explore! It contains everything you
-                    need to get started including the{" "}
-                    <Link url="https://polaris.shopify.com/" external>
-                      Polaris design system
-                    </Link>
-                    ,{" "}
-                    <Link url="https://shopify.dev/api/admin-graphql" external>
-                      Shopify Admin API
-                    </Link>
-                    , and{" "}
-                    <Link
-                      url="https://shopify.dev/apps/tools/app-bridge"
-                      external
-                    >
-                      App Bridge
-                    </Link>{" "}
-                    UI library and components.
-                  </p>
-                  <p>
-                    Ready to go? Start populating your app with some sample
-                    products to view and test in your store.{" "}
-                  </p>
-                  <p>
-                    Learn more about building out your app in{" "}
-                    <Link
-                      url="https://shopify.dev/apps/getting-started/add-functionality"
-                      external
-                    >
-                      this Shopify tutorial
-                    </Link>{" "}
-                    📚{" "}
-                  </p>
-                </TextContainer>
-              </Stack.Item>
-              <Stack.Item>
-                <div style={{ padding: "0 20px" }}>
-                  <Image
-                    source={trophyImage}
-                    alt="Nice work on building a Shopify app"
-                    width={120}
-                  />
-                </div>
-              </Stack.Item>
-            </Stack>
-          </Card>
-        </Layout.Section>
-        <Layout.Section>
-          <ProductsCard />
-        </Layout.Section>
+        <EmptyState
+          heading="Discount your products temporarily"
+          action={{ content: "Select products", onAction: () => setOpen(true) }}
+          image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+        >
+          <p>Select products to change their price temporarily.</p>
+        </EmptyState>
       </Layout>
     </Page>
   );
 }
+
+export default Index;
